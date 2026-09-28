@@ -22,7 +22,6 @@ It shows:
 ## Run it
 
 ```bash
-cd apps/dashtro
 pnpm install
 pnpm --filter dashtro-example seed   # downloads the data and writes data/analytics.duckdb
 pnpm --filter dashtro-example dev

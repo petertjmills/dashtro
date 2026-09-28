@@ -4,6 +4,17 @@
   "description": "Declarative, code-first dashboards for Astro. Write SQL and markup, get pretty live charts.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://forgejo.pm4.uk/peter/dashtro.git"
+  },
+  "homepage": "https://forgejo.pm4.uk/peter/dashtro#readme",
+  "bugs": {
+    "url": "https://forgejo.pm4.uk/peter/dashtro/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": [
     "*.css",
     "dist/routes/*.js"
@@ -21,7 +32,8 @@
   "files": [
     "dist",
     "assets",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {

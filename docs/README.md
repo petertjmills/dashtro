@@ -17,7 +17,7 @@ not need a database. `src/content/docs/examples.mdx` is the gallery;
 
 ## Run it
 
-From `apps/dashtro`:
+From the repository root:
 
 ```bash
 pnpm install

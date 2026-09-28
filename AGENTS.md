@@ -1,7 +1,9 @@
 # Dashtro — agent notes
 
 `dashtro` is an Astro integration plus a small component library. It turns `.sql`
-files and Markdown/Astro pages into dashboards.
+files and Markdown/Astro pages into dashboards. This is the standalone Dashtro
+repository. All commands run from the repository root unless a section says
+otherwise.
 
 See `README.md` for the user-facing documentation. This file is for working on
 the package itself.

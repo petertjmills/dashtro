@@ -21,8 +21,9 @@ and markup. Get a pretty, mobile-friendly dashboard with live data.
 ## Documentation
 
 The full documentation lives in [`docs/`](./docs), built with Starlight and
-organised with the [Diátaxis](https://diataxis.fr/) framework. Run it from
-`apps/dashtro`:
+organised with the [Diátaxis](https://diataxis.fr/) framework. The source and
+the issue tracker live on [Forgejo](https://forgejo.pm4.uk/peter/dashtro). Run
+the docs from the repository root:
 
 ```bash
 pnpm --filter dashtro-docs dev
@@ -425,7 +426,6 @@ generated. Upgrade to Tailwind v4.
 the Stack Exchange Developer Survey 2025 and The Simpsons episode dataset.
 
 ```bash
-cd apps/dashtro
 pnpm install
 pnpm --filter dashtro-example seed   # downloads the data, creates example/data/analytics.duckdb
 pnpm --filter dashtro-example dev
@@ -438,7 +438,6 @@ API. The seed script needs network access on the first run.
 ## Development
 
 ```bash
-cd apps/dashtro
 pnpm install
 pnpm build       # compile the package into dist/
 pnpm test        # vitest unit tests
