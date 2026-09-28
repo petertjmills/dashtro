@@ -1,0 +1,110 @@
+@import '@fontsource-variable/inter';
+
+/*
+ * Site chrome overrides.
+ *
+ * starlight-theme-black hard-codes Geist. Point its font variables at Inter.
+ */
+:root {
+	--font-geist: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+		Roboto, sans-serif;
+	--font-geist-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/*
+ * The Dashtro wordmark is 401x102. Starlight sizes a logo to the nav content
+ * height, and starlight-theme-black caps it at 32x32 and hides it on mobile.
+ *
+ * The text baseline sits at 63.8 of the 102-tall viewBox and the mark tail
+ * hangs below it, so centring the image leaves the wordmark text about 3px
+ * above the nav links. Nudge it down.
+ *
+ * Keep the logo visible on mobile so there is always a way home.
+ */
+.site-title {
+	display: flex;
+}
+
+.site-title img {
+	height: 2.5rem;
+	max-height: 2.5rem;
+	max-width: none;
+	width: auto;
+	transform: translateY(3px);
+}
+
+@media (max-width: 63.999rem) {
+	.site-title img {
+		height: 1.75rem;
+		max-height: 1.75rem;
+		transform: translateY(1px);
+	}
+}
+
+/* Landing page hero. */
+.dashtro-hero {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 1.5rem;
+	margin-block: 1.5rem 3rem;
+}
+
+.dashtro-hero img {
+	width: 22rem;
+	max-width: 100%;
+	height: auto;
+}
+
+.dashtro-logo-dark {
+	display: none;
+}
+
+[data-theme='dark'] .dashtro-logo-light {
+	display: none;
+}
+
+[data-theme='dark'] .dashtro-logo-dark {
+	display: block;
+}
+
+.dashtro-tagline {
+	margin: 0;
+	max-width: 56rem;
+	font-size: 1.125rem;
+	line-height: 1.75rem;
+	text-wrap: balance;
+}
+
+.dashtro-actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.75rem;
+}
+
+/*
+ * Chart layout. Grid items default to `min-width: auto`, which lets a chart
+ * push the column wider than the viewport on mobile. `min-width: 0` lets the
+ * column shrink and the chart fill it.
+ */
+.dashtro-example > * {
+	min-width: 0;
+}
+
+.dashtro-chart-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 1.5rem;
+}
+
+.dashtro-chart-grid > * {
+	min-width: 0;
+}
+
+@media (min-width: 64rem) {
+	.dashtro-chart-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}

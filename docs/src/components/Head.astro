@@ -1,0 +1,12 @@
+---
+// Overrides starlight-theme-black's Head, which preloads Geist. The docs use
+// Inter instead (see `src/styles/site.css`), so the Geist preloads are dead
+// weight. This renders the Starlight head and nothing else.
+const { head } = Astro.locals.starlightRoute;
+---
+
+{
+	head.map(({ tag: Tag, attrs, content }) => (
+		<Tag {...attrs} set:html={content} />
+	))
+}

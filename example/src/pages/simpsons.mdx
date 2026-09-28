@@ -1,0 +1,94 @@
+---
+layout: ../layouts/Dashboard.astro
+title: "The Simpsons"
+description: "What made people stop watching? US viewers and IMDb ratings, 1989 to 2016."
+---
+
+import { AreaChart, BarChart, LineChart } from 'dashtro/react';
+import viewersBySeason from '../queries/simpsons-viewers-by-season.sql';
+import ratingBySeason from '../queries/simpsons-rating-by-season.sql';
+import viewersChange from '../queries/simpsons-viewers-change.sql';
+import episodes from '../queries/simpsons-episodes.sql';
+import mostWatched from '../queries/simpsons-most-watched.sql';
+import lowestRated from '../queries/simpsons-lowest-rated.sql';
+
+export const [viewers, ratings, change, allEpisodes, top, bottom] = await Promise.all([
+  viewersBySeason.run(),
+  ratingBySeason.run(),
+  viewersChange.run(),
+  episodes.run(),
+  mostWatched.run(),
+  lowestRated.run(),
+]);
+
+The audience fell during the whole run, and quality fell with it. The sharpest
+single drop is between seasons 8 and 9. The decline then continues for another
+18 years. Use the sliders on the episode chart to isolate high-rated or
+high-audience episodes.
+
+<LineChart
+  client:load
+  data={viewers}
+  x="season"
+  series={[{ key: 'viewers', label: 'US viewers (millions)' }]}
+  title="Average US viewers by season"
+  description="From 27.8 million in season 1 to 4.0 million in season 27."
+  height={320}
+/>
+
+<LineChart
+  client:load
+  data={ratings}
+  x="season"
+  series={[{ key: 'rating', label: 'IMDb rating' }]}
+  title="Average IMDb rating by season"
+  description="The rating peaked at 8.34 in season 5 and never returned above 8.0 after season 9."
+  height={320}
+/>
+
+<BarChart
+  client:load
+  data={change}
+  x="season"
+  series={[{ key: 'change', label: 'Change (millions)' }]}
+  title="Viewers gained or lost per season"
+  description="Negative bars are seasons that lost viewers. Season 1 has no previous season."
+  height={320}
+/>
+
+<AreaChart
+  client:load
+  data={allEpisodes}
+  x="air_date"
+  series={[{ key: 'viewers', label: 'US viewers (millions)' }]}
+  title="Every episode, 1989 to 2016"
+  description="A steady decline, with a spike at the start. Filter by rating and audience."
+  filters={[
+    { type: 'numberRange', field: 'rating', label: 'IMDb rating' },
+    { type: 'numberRange', field: 'viewers', label: 'US viewers (M)' },
+  ]}
+  height={340}
+/>
+
+<div class="grid gap-6 lg:grid-cols-2">
+  <BarChart
+    client:load
+    data={top}
+    x="title"
+    series={[{ key: 'viewers', label: 'US viewers (millions)' }]}
+    horizontal
+    title="Most-watched episodes"
+    description="All ten are from the first four seasons."
+    height={360}
+  />
+  <BarChart
+    client:load
+    data={bottom}
+    x="title"
+    series={[{ key: 'rating', label: 'IMDb rating' }]}
+    horizontal
+    title="Lowest-rated episodes"
+    description="All ten are from season 9 or later."
+    height={360}
+  />
+</div>

@@ -1,0 +1,169 @@
+---
+import { BarChart, PieChart } from 'dashtro/react';
+import Dashboard from '../layouts/Dashboard.astro';
+import happinessFactors from '../queries/happiness-factors.sql';
+import jobSatisfaction from '../queries/job-satisfaction.sql';
+import jobSatisfactionByCountry from '../queries/job-satisfaction-by-country.sql';
+import tools from '../queries/tools.sql';
+import workArrangement from '../queries/work-arrangement.sql';
+import devTypes from '../queries/dev-types.sql';
+
+const [factors, satisfaction, byCountry, work, roles, languages, databases, webframes, devEnvs, aiModels] =
+  await Promise.all([
+    happinessFactors.run(),
+    jobSatisfaction.run(),
+    jobSatisfactionByCountry.run(),
+    workArrangement.run(),
+    devTypes.run(),
+    tools.run({ question: 'Language', limit: 12 }),
+    tools.run({ question: 'Database', limit: 10 }),
+    tools.run({ question: 'Webframe', limit: 10 }),
+    tools.run({ question: 'DevEnvs', limit: 10 }),
+    tools.run({ question: 'AIModels', limit: 10 }),
+  ]);
+
+// A select filter on the survey group. The query returns every group, and the
+// chart starts on "All Respondents".
+const groupFilter = [
+  {
+    type: 'select' as const,
+    field: 'dataset_name',
+    label: 'Group',
+    defaultValue: 'All Respondents',
+  },
+];
+
+const percent = { style: 'decimal' as const, maximumFractionDigits: 1 };
+---
+
+<Dashboard
+  title="What makes developers happy?"
+  description="Stack Exchange Developer Survey 2025. 48,000 responses across 60 questions."
+>
+  <section class="grid gap-6 lg:grid-cols-2">
+    <BarChart
+      client:load
+      data={factors}
+      x="factor"
+      series={[{ key: 'median_rank', label: 'Median rank' }]}
+      horizontal
+      title="What matters most in a job"
+      description="Median rank across 24,900 respondents. A lower rank is more important."
+      height={460}
+    />
+    <PieChart
+      client:load
+      data={satisfaction}
+      x="response"
+      series={[{ key: 'percent', label: 'Share' }]}
+      title="Are developers happy at work?"
+      description="Only a quarter of respondents say they are happy in their current role."
+      showLegend
+      height={360}
+    />
+  </section>
+
+  <BarChart
+    client:load
+    data={byCountry}
+    x="country"
+    series={[
+      { key: 'happy', label: 'Happy' },
+      { key: 'complacent', label: 'Complacent' },
+      { key: 'not_happy', label: 'Not happy' },
+    ]}
+    title="Job satisfaction by country"
+    description="US respondents report the highest satisfaction; German respondents the lowest."
+    valueFormat={percent}
+    showLegend
+    height={320}
+  />
+
+  <section class="grid gap-6 lg:grid-cols-2">
+    <BarChart
+      client:load
+      data={work}
+      x="response"
+      series={[{ key: 'percent', label: 'Share' }]}
+      title="How developers work"
+      description="Remote and flexible work is now the largest single group."
+      valueFormat={percent}
+      height={320}
+    />
+    <BarChart
+      client:load
+      data={roles}
+      x="role"
+      series={[{ key: 'percent', label: 'Share' }]}
+      horizontal
+      title="What developers do"
+      description="Full-stack development is the most common role."
+      valueFormat={percent}
+      height={320}
+    />
+  </section>
+
+  <h2 class="pt-2 text-lg font-semibold">Which tools do developers use?</h2>
+  <p class="text-sm text-muted-foreground">
+    Every chart carries the same group filter. Change a group on one chart and the others keep
+    their own selection.
+  </p>
+
+  <section class="grid gap-6 lg:grid-cols-2">
+    <BarChart
+      client:load
+      data={languages}
+      x="tool"
+      series={[{ key: 'percent', label: 'Usage' }]}
+      horizontal
+      title="Languages"
+      filters={groupFilter}
+      valueFormat={percent}
+      height={400}
+    />
+    <BarChart
+      client:load
+      data={databases}
+      x="tool"
+      series={[{ key: 'percent', label: 'Usage' }]}
+      horizontal
+      title="Databases"
+      filters={groupFilter}
+      valueFormat={percent}
+      height={360}
+    />
+    <BarChart
+      client:load
+      data={webframes}
+      x="tool"
+      series={[{ key: 'percent', label: 'Usage' }]}
+      horizontal
+      title="Web frameworks and technologies"
+      filters={groupFilter}
+      valueFormat={percent}
+      height={360}
+    />
+    <BarChart
+      client:load
+      data={devEnvs}
+      x="tool"
+      series={[{ key: 'percent', label: 'Usage' }]}
+      horizontal
+      title="Development environments"
+      filters={groupFilter}
+      valueFormat={percent}
+      height={360}
+    />
+    <BarChart
+      client:load
+      data={aiModels}
+      x="tool"
+      series={[{ key: 'percent', label: 'Usage' }]}
+      horizontal
+      title="AI models used for development"
+      filters={groupFilter}
+      valueFormat={percent}
+      height={360}
+    />
+  </section>
+</Dashboard>

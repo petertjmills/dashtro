@@ -1,0 +1,121 @@
+---
+title: Dashtro
+description: Declarative, code-first dashboards for Astro. Write SQL and markup, get a mobile-friendly dashboard.
+template: splash
+hero:
+  tagline: Write SQL and markup. Get a mobile-friendly dashboard.
+  actions:
+    - text: Build your first dashboard
+      link: /tutorials/first-dashboard/
+      icon: right-arrow
+    - text: Live examples
+      link: /examples/
+      icon: document
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import { AreaChart, BarChart, PieChart } from 'dashtro/react';
+
+export const monthly = [
+  { month: 'Jan', desktop: 342, mobile: 245 },
+  { month: 'Feb', desktop: 876, mobile: 654 },
+  { month: 'Mar', desktop: 512, mobile: 387 },
+  { month: 'Apr', desktop: 629, mobile: 521 },
+  { month: 'May', desktop: 458, mobile: 412 },
+  { month: 'Jun', desktop: 781, mobile: 598 },
+];
+
+export const browsers = [
+  { browser: 'Chrome', visitors: 275 },
+  { browser: 'Safari', visitors: 200 },
+  { browser: 'Firefox', visitors: 187 },
+  { browser: 'Edge', visitors: 173 },
+  { browser: 'Other', visitors: 90 },
+];
+
+export const models = [
+  { model: 'OpenAI GPT', requests: 4200 },
+  { model: 'Claude Sonnet', requests: 3100 },
+  { model: 'Gemini Flash', requests: 2400 },
+  { model: 'Meta Llama', requests: 1200 },
+  { model: 'DeepSeek', requests: 800 },
+];
+
+Dashtro turns `.sql` files and Markdown or Astro pages into dashboards. You write
+the query, you run the query, and a chart renders the rows.
+
+<CardGrid stagger>
+	<Card title="SQL-first" icon="approve-check">
+		Import a `.sql` file as a module and call `run()`. Dashtro binds the
+		parameters and returns plain rows.
+	</Card>
+	<Card title="Presentational charts" icon="puzzle">
+		Charts render the rows you pass. They never fetch, so they work in
+		static builds, SSR pages and client islands alike.
+	</Card>
+	<Card title="Built-in filters" icon="setting">
+		Add a select, a date range or a number slider with one `filters` prop.
+	</Card>
+	<Card title="DuckDB and Postgres" icon="laptop">
+		One connection string. Dashtro rewrites `:name` placeholders for each
+		dialect.
+	</Card>
+</CardGrid>
+
+## Charts from your SQL
+
+These charts pass `data` directly, so they need no database. In a real dashboard
+you run `sql.run()` in the page and pass the rows the same way.
+
+<section class="not-content dashtro-example dashtro-chart-grid">
+  <BarChart
+    client:load
+    data={monthly}
+    x="month"
+    series={[{ key: 'desktop', label: 'Desktop' }, { key: 'mobile', label: 'Mobile' }]}
+    title="Visitors by month"
+    showLegend
+    height={280}
+  />
+  <AreaChart
+    client:load
+    data={monthly}
+    x="month"
+    series={[{ key: 'desktop', label: 'Desktop' }]}
+    title="Desktop visitors"
+    height={280}
+  />
+  <PieChart
+    client:load
+    data={browsers}
+    x="browser"
+    series={[{ key: 'visitors', label: 'Visitors' }]}
+    title="Browser share"
+    showLegend
+    height={280}
+  />
+  <BarChart
+    client:load
+    data={models}
+    x="model"
+    series={[{ key: 'requests', label: 'Requests' }]}
+    title="Requests by model"
+    horizontal
+    height={280}
+  />
+</section>
+
+[See every chart and filter in the examples &rarr;](/examples/)
+
+## How these docs are organised
+
+The pages follow the [Diátaxis](https://diataxis.fr/) structure:
+
+- **Tutorials** teach you by building something. Start here if Dashtro is new.
+- **How-to guides** solve one specific problem. Look here when you know the goal.
+- **Reference** describes the exact API. Look here for options and types.
+- **Explanation** discusses why Dashtro works the way it does.
+
+If you want to see a full app first, the package ships an
+[example](https://forgejo.pm4.uk/peter/pm4) with two dashboards over real data.

@@ -1,0 +1,8 @@
+packages:
+  - example
+  - docs
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  '@duckdb/node-api': true

@@ -1,0 +1,28 @@
+---
+// Overrides starlight-theme-black's Hero so the Dashtro wordmark replaces the
+// hero title text. Only the docs landing page has a `hero`, so this is the only
+// page it affects.
+import { LinkButton } from '@astrojs/starlight/components';
+
+const { data } = Astro.locals.starlightRoute.entry;
+const { tagline: heroTagline, actions = [] } = data.hero ?? {};
+const tagline = heroTagline || data.description;
+---
+
+<div class="not-content dashtro-hero">
+	<h1 class="sr-only">{data.title}</h1>
+	<img class="dashtro-logo-light" src="/logo.svg" alt={data.title} />
+	<img class="dashtro-logo-dark" src="/logo-dark.svg" alt={data.title} />
+	{tagline && <p class="dashtro-tagline" set:html={tagline} />}
+	{
+		actions.length > 0 && (
+			<div class="dashtro-actions">
+				{actions.map(({ text, link, variant, icon }) => (
+					<LinkButton href={link} variant={variant} icon={icon?.name}>
+						{text}
+					</LinkButton>
+				))}
+			</div>
+		)
+	}
+</div>

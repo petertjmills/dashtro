@@ -1,0 +1,195 @@
+---
+title: Examples
+description: Live examples of every Dashtro chart and filter, using static data.
+---
+
+import { AreaChart, BarChart, LineChart, PieChart, RadarChart, RadialChart } from 'dashtro/react';
+
+These examples pass `data` directly, so they need no database. In a real
+dashboard you run `sql.run()` in the page and pass the rows the same way.
+
+export const monthly = [
+  { month: 'Jan', desktop: 342, mobile: 245 },
+  { month: 'Feb', desktop: 876, mobile: 654 },
+  { month: 'Mar', desktop: 512, mobile: 387 },
+  { month: 'Apr', desktop: 629, mobile: 521 },
+  { month: 'May', desktop: 458, mobile: 412 },
+  { month: 'Jun', desktop: 781, mobile: 598 },
+  { month: 'Jul', desktop: 394, mobile: 312 },
+  { month: 'Aug', desktop: 925, mobile: 743 },
+];
+
+export const browsers = [
+  { browser: 'Chrome', visitors: 275 },
+  { browser: 'Safari', visitors: 200 },
+  { browser: 'Firefox', visitors: 187 },
+  { browser: 'Edge', visitors: 173 },
+  { browser: 'Other', visitors: 90 },
+];
+
+export const skills = [
+  { skill: 'JavaScript', desktop: 186, mobile: 80 },
+  { skill: 'TypeScript', desktop: 305, mobile: 200 },
+  { skill: 'React', desktop: 237, mobile: 120 },
+  { skill: 'Node.js', desktop: 173, mobile: 190 },
+  { skill: 'CSS', desktop: 209, mobile: 130 },
+  { skill: 'Python', desktop: 214, mobile: 140 },
+];
+
+export const usage = [
+  { model: 'OpenAI GPT', requests: 4200 },
+  { model: 'Claude Sonnet', requests: 3100 },
+  { model: 'Gemini Flash', requests: 2400 },
+  { model: 'Meta Llama', requests: 1200 },
+  { model: 'DeepSeek', requests: 800 },
+];
+
+export const spend = (() => {
+  const rows = [];
+  const today = new Date();
+  for (let i = 13; i >= 0; i -= 1) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+    const day = date.toISOString().slice(0, 10);
+    rows.push({ day, region: 'UK', spend: 1200 + ((i * 137) % 900) });
+    rows.push({ day, region: 'US', spend: 1900 + ((i * 211) % 1200) });
+  }
+  return rows;
+})();
+
+## Bar chart
+
+<div class="not-content dashtro-example">
+  <BarChart
+    client:load
+    data={monthly}
+    x="month"
+    series={[
+      { key: 'desktop', label: 'Desktop' },
+      { key: 'mobile', label: 'Mobile' },
+    ]}
+    title="Visitors by month"
+    showLegend
+    height={320}
+  />
+</div>
+
+## Horizontal bar chart
+
+Set `horizontal` to put the categories on the y-axis. Long labels are shortened
+and the full label stays in the tooltip.
+
+<div class="not-content dashtro-example">
+  <BarChart
+    client:load
+    data={usage}
+    x="model"
+    series={[{ key: 'requests', label: 'Requests' }]}
+    title="Requests by model"
+    horizontal
+    height={300}
+  />
+</div>
+
+## Line chart
+
+<div class="not-content dashtro-example">
+  <LineChart
+    client:load
+    data={monthly}
+    x="month"
+    series={[{ key: 'desktop', label: 'Desktop' }, { key: 'mobile', label: 'Mobile' }]}
+    title="Visitors by month"
+    showLegend
+    height={320}
+  />
+</div>
+
+## Area chart
+
+<div class="not-content dashtro-example">
+  <AreaChart
+    client:load
+    data={monthly}
+    x="month"
+    series={[{ key: 'desktop', label: 'Desktop' }, { key: 'mobile', label: 'Mobile' }]}
+    title="Visitors by month"
+    stacked
+    showLegend
+    height={320}
+  />
+</div>
+
+## Pie chart
+
+`x` names the slices. The first series is the value.
+
+<div class="not-content dashtro-example">
+  <PieChart
+    client:load
+    data={browsers}
+    x="browser"
+    series={[{ key: 'visitors', label: 'Visitors' }]}
+    title="Browser share"
+    showLegend
+    height={340}
+  />
+</div>
+
+## Radar chart
+
+<div class="not-content dashtro-example">
+  <RadarChart
+    client:load
+    data={skills}
+    x="skill"
+    series={[{ key: 'desktop', label: 'Desktop' }, { key: 'mobile', label: 'Mobile' }]}
+    title="Skills by platform"
+    showLegend
+    height={340}
+  />
+</div>
+
+## Radial chart
+
+<div class="not-content dashtro-example">
+  <RadialChart
+    client:load
+    data={usage}
+    x="model"
+    series={[{ key: 'requests', label: 'Requests' }]}
+    title="Requests by model"
+    height={340}
+  />
+</div>
+
+## Filters
+
+Add a `filters` prop to a chart. The controls run in the browser: the query does
+not run again. This chart has a select, a date range and a number range.
+
+<div class="not-content dashtro-example">
+  <BarChart
+    client:load
+    data={spend}
+    x="day"
+    series={[{ key: 'spend', label: 'Spend' }]}
+    title="Spend by day"
+    valueFormat={{ style: 'currency', currency: 'GBP' }}
+    filters={[
+      { type: 'select', field: 'region', label: 'Region', defaultValue: 'UK' },
+      {
+        type: 'dateRange',
+        field: 'day',
+        label: 'Window',
+        presets: [
+          { label: '3 days', days: 3 },
+          { label: '7 days', days: 7 },
+        ],
+        defaultValue: 7,
+      },
+      { type: 'numberRange', field: 'spend', label: 'Spend', defaultMin: 1000 },
+    ]}
+    height={340}
+  />
+</div>

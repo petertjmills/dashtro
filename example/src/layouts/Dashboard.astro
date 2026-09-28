@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Set by the MDX integration when a page uses a `layout` in its front matter. */
+  frontmatter?: { title?: string; description?: string };
+}
+
+const { title, description, frontmatter } = Astro.props;
+const pageTitle = title ?? frontmatter?.title ?? 'Dashtro';
+const pageDescription = description ?? frontmatter?.description;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="icon"
+      href="/favicon-dark.svg"
+      type="image/svg+xml"
+      media="(prefers-color-scheme: dark)"
+    />
+    <title>{pageTitle}</title>
+    {pageDescription ? <meta name="description" content={pageDescription} /> : null}
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <div class="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+      <header class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 class="text-2xl font-semibold tracking-tight">{pageTitle}</h1>
+          {pageDescription ? <p class="text-sm text-muted-foreground">{pageDescription}</p> : null}
+        </div>
+        <nav class="flex gap-4 text-sm">
+          <a href="/" class="text-muted-foreground transition-colors hover:text-foreground">Developer survey</a>
+          <a href="/simpsons" class="text-muted-foreground transition-colors hover:text-foreground">Simpsons</a>
+        </nav>
+      </header>
+      <main class="flex flex-col gap-6">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
