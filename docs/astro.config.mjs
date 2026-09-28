@@ -31,8 +31,8 @@ export default defineConfig({
 				},
 			],
 			logo: {
-				light: '../assets/logo-black-gradient-dashtro.svg',
-				dark: '../assets/logo-white-gradient-dashtro.svg',
+				light: '../assets/logo-black-gradient-dashtro.webp',
+				dark: '../assets/logo-white-gradient-dashtro.webp',
 				alt: 'Dashtro',
 				replacesTitle: true,
 			},

@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white-gradient-dashtro.svg">
-    <img alt="Dashtro" src="./assets/logo-black-gradient-dashtro.svg" width="260">
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-white-gradient-dashtro.webp">
+    <img alt="Dashtro" src="./assets/logo-black-gradient-dashtro.webp" width="260">
   </picture>
 </p>
 

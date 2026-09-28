@@ -12,12 +12,13 @@
 }
 
 /*
- * The Dashtro wordmark is 401x102. Starlight sizes a logo to the nav content
- * height, and starlight-theme-black caps it at 32x32 and hides it on mobile.
+ * The Dashtro wordmark is about 402x109. Starlight sizes a logo to the nav
+ * content height, and starlight-theme-black caps it at 32x32 and hides it on
+ * mobile.
  *
- * The text baseline sits at 63.8 of the 102-tall viewBox and the mark tail
- * hangs below it, so centring the image leaves the wordmark text about 3px
- * above the nav links. Nudge it down.
+ * The text sits above the vertical centre of the image and the mark tail hangs
+ * below it, so centring the image leaves the wordmark text a few pixels above
+ * the nav links. Nudge it down.
  *
  * Keep the logo visible on mobile so there is always a way home.
  */
