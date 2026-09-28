@@ -51,6 +51,12 @@ pnpm test         # vitest
 pnpm typecheck    # tsc --noEmit
 ```
 
+The Postgres integration tests are skipped unless a scratch database is set:
+
+```bash
+DASHTRO_TEST_POSTGRES_URL=postgres://postgres@127.0.0.1:5432/dashtro_test pnpm test
+```
+
 The example app depends on the built `dist/`, so always `pnpm build` before
 running the example.
 

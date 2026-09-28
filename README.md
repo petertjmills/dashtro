@@ -45,6 +45,16 @@ true of the database connector: install `@duckdb/node-api` for DuckDB or `pg`
 for Postgres. If you already use the React/MDX integrations, dashtro leaves your
 setup alone.
 
+If pnpm 11 reports `ERR_PNPM_IGNORED_BUILDS`, allow the build scripts that Astro
+and Dashtro need. Add this to `pnpm-workspace.yaml`:
+
+```yaml
+allowBuilds:
+  esbuild: true
+  sharp: true
+  '@duckdb/node-api': true
+```
+
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
@@ -498,4 +508,6 @@ Two virtual modules connect the integration to the runtime:
   component with Recharts and render it as an island.
 - Parameter types come from front matter. Dashtro does not generate types from
   the database schema yet.
-- The Postgres adapter is implemented but not covered by integration tests.
+- The Postgres adapter is implemented. It converts `int8` and `numeric`
+  values to numbers. The Postgres integration tests run only when
+  `DASHTRO_TEST_POSTGRES_URL` is set.

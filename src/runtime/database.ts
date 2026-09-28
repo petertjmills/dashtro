@@ -219,10 +219,46 @@ async function createPostgres(connectionString: string, poolSize: number): Promi
     dialect: 'postgres',
     async query(text: string, values: unknown[]): Promise<Row[]> {
       const result = await pool.query(text, values);
-      return result.rows as Row[];
+      return result.rows.map((row) => normalizePostgresRow(row, result.fields)) as Row[];
     },
     async close(): Promise<void> {
       await pool.end();
     },
   };
+}
+
+// Postgres type OIDs that `pg` returns as strings to keep their precision.
+const PG_INT8 = 20;
+const PG_NUMERIC = 1700;
+
+/**
+ * `pg` returns `int8` and `numeric` values as strings. Charts and
+ * `JSON.stringify` need numbers, so convert them the same way the DuckDB adapter
+ * converts bigints: safe integers and finite decimals become numbers, and the
+ * rest stay strings.
+ */
+function normalizePostgresRow(
+  row: Record<string, unknown>,
+  fields: Array<{ name: string; dataTypeID: number }>,
+): Record<string, unknown> {
+  const result = { ...row };
+  for (const field of fields) {
+    result[field.name] = normalizePostgresValue(result[field.name], field.dataTypeID);
+  }
+  return result;
+}
+
+function normalizePostgresValue(value: unknown, dataTypeID: number): unknown {
+  if (typeof value !== 'string') {
+    return value;
+  }
+  if (dataTypeID === PG_INT8) {
+    const asNumber = Number(value);
+    return Number.isSafeInteger(asNumber) ? asNumber : value;
+  }
+  if (dataTypeID === PG_NUMERIC) {
+    const asNumber = Number(value);
+    return Number.isFinite(asNumber) ? asNumber : value;
+  }
+  return value;
 }
