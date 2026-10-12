@@ -44,6 +44,9 @@ the package itself.
 
 ## Commands
 
+The repository has a Nix flake. Run `nix develop` (or use direnv) to get Node,
+pnpm, DuckDB, Postgres and unzip. Run `nix fmt flake.nix` to format the flake.
+
 ```bash
 pnpm install
 pnpm build        # rm -rf dist && tsc && bundle React && copy .astro + styles.css
